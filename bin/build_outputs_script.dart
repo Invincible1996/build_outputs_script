@@ -10,8 +10,14 @@ import 'response_model.dart';
 ///
 void main(List<String> arguments) {
   print(arguments);
-  print('Hello world!'.isLengthBigThan10());
-  // uploadFile();
+  var map = {};
+  for (var item in arguments) {
+    // print(item.split('='));
+    var itemList = item.split('=');
+    map.putIfAbsent(itemList[0], () => itemList[1]);
+  }
+  print(map);
+  uploadFile(map);
 }
 
 /// @params
@@ -26,16 +32,22 @@ String getFilePath() {
 /// @params
 /// @return
 /// @desc
-void uploadFile() async {
+void uploadFile(map) async {
   // var path = getFilePath();
-  var file = File('C:\\Users\\kevin\\Downloads\\唯寻工作台_2.0.5.apk');
+  var file = File(map['filePath']);
   var fileName = file.path.split('/').last;
-  var formData = FormData.fromMap({
-    'file': await MultipartFile.fromFile(file.path, filename: fileName),
-  });
+  var formData = FormData.fromMap(
+    {
+      'file': await MultipartFile.fromFile(file.path, filename: fileName),
+      'uKey': map['uKey'],
+      '_api_key': map['_api_key'],
+    },
+  );
   var dio = Dio();
-  var response = await dio.post('https://www.pgyer.com/apiv1/app/upload', data: formData);
+  var response = await dio.post('https://www.pgyer.com/apiv1/app/upload', data: formData, onReceiveProgress: (rec, total) {
+    print(rec / total);
+  });
   // await dio.post('https://www.pgyer.com/apiv1/app/upload');
   var model = ResponseModel.fromJson(response.data);
-  print(model.code);
+  print(model.data.appQRCodeURL);
 }
