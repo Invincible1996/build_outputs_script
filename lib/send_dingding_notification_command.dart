@@ -21,8 +21,8 @@ class SendDingDingNotificationCommand extends Command {
 
   @override
   FutureOr<void> run() {
-    print(argResults?.arguments);
-    print(argParser.usage);
+    // print(argResults?.arguments);
+    // print(argParser.usage);
     final token = argResults?['token'] ?? '';
     final message = argResults?['message'] ?? '';
     print(token);
@@ -44,9 +44,10 @@ class SendDingDingNotificationCommand extends Command {
         }
       },
     );
-    await Dio().post(
+    final resposne = await Dio().post(
       'https://oapi.dingtalk.com/robot/send?access_token=$token',
       data: formData,
     );
+    print(resposne.statusCode);
   }
 }
