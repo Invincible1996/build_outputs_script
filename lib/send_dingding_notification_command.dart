@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
+import 'package:dio/dio.dart';
 
 /// @date: 2022/8/31 16:41
 /// @author: kevin
@@ -22,7 +23,30 @@ class SendDingDingNotificationCommand extends Command {
   FutureOr<void> run() {
     print(argResults?.arguments);
     print(argParser.usage);
-    final token = int.parse(argResults?['token'] ?? '20');
+    final token = argResults?['token'] ?? '';
+    final message = argResults?['message'] ?? '';
     print(token);
+    print(message);
+    sendNotification(token, message);
+  }
+
+  /// @params
+  /// @params
+  /// @return
+  /// @desc
+  void sendNotification(String token, String message) async {
+    var formData = FormData.fromMap(
+      {
+        'msgtype': 'markdown',
+        'markdown': {
+          'title': 'App 构建',
+          'text': message,
+        }
+      },
+    );
+    await Dio().post(
+      'https://oapi.dingtalk.com/robot/send?access_token=$token',
+      data: formData,
+    );
   }
 }
