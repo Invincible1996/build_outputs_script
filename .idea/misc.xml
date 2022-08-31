@@ -6,6 +6,9 @@
     <other-services-enabled>true</other-services-enabled>
     <auto-save>true</auto-save>
   </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/bin/config.txt" />
+  </component>
   <component name="ProjectRootManager">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
